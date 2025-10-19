@@ -16,8 +16,7 @@ var (
 	ErrInvalidInput = errors.New("invalid input")
 
 	// Regular expressions for validation
-	hostRegex    = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$`)
-	modelIDRegex = regexp.MustCompile(`^[a-zA-Z0-9_\-\./:]+$`)
+	hostRegex = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$`)
 )
 
 // ValidationError represents a validation error with context
@@ -220,14 +219,6 @@ func ValidateModelID(modelID string) error {
 			Field:   "model_id",
 			Value:   modelID,
 			Message: fmt.Sprintf("model ID exceeds maximum length of %d characters", MaxModelIDLength),
-		}
-	}
-
-	if !modelIDRegex.MatchString(modelID) {
-		return ValidationError{
-			Field:   "model_id",
-			Value:   modelID,
-			Message: "model ID contains invalid characters (allowed: letters, numbers, _, -, ., /, :)",
 		}
 	}
 
