@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  goreleaser:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+      - name: Create DMG for arm64
+        run: |
+          mkdir -p dmg-build/arm64
+          cp dist/lazylms-macos_darwin_arm64/lazylms-macos dmg-build/arm64/
+          create-dmg \
+            --volname "lazylms-macos v${{ github.ref_name }}" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 450 185 \
+            "dist/lazylms-macos_${{ github.ref_name }}_darwin_arm64.dmg" \
+            "dmg-build/arm64/"
+
+      - name: Create DMG for amd64
+        run: |
+          mkdir -p dmg-build/amd64
+          cp dist/lazylms-macos_darwin_amd64_v1/lazylms-macos dmg-build/amd64/
+          create-dmg \
+            --volname "lazylms-macos v${{ github.ref_name }}" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 450 185 \
+            "dist/lazylms-macos_${{ github.ref_name }}_darwin_amd64.dmg" \
+            "dmg-build/amd64/"
+
+      - name: Upload DMG files to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
