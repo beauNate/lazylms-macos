@@ -4,9 +4,15 @@ A minimal TUI client for LM Studio. Currently in BETA state and supports only ba
 
 ## Installation
 
+### Homebrew (macOS/Linux)
+
 ```bash
-go install github.com/Rugz007/lazylms/cmd/lazylms@latest
+brew install rugz007/tap/lazylms
 ```
+
+### Download Binary
+
+Download the latest release for your platform from [GitHub Releases](https://github.com/Rugz007/lazylms/releases)
 
 ## Usage
 
@@ -23,5 +29,4 @@ lazylms
 
 ## Requirements
 
-- Go 1.24+
 - Running LM Studio instance
