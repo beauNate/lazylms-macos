@@ -2,10 +2,6 @@
 
 [![Release](https://img.shields.io/github/v/release/beauNate/lazylms-macos?style=flat-square)](https://github.com/beauNate/lazylms-macos/releases/latest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT) [![Go Version](https://img.shields.io/github/go-mod/go-version/beauNate/lazylms-macos?style=flat-square)](https://go.dev/) [![Tests](https://img.shields.io/github/actions/workflow/status/beauNate/lazylms-macos/test.yml?branch=main&label=tests&style=flat-square)](https://github.com/beauNate/lazylms-macos/actions/workflows/test.yml) [![Homebrew](https://img.shields.io/badge/homebrew-available-orange?style=flat-square)](https://github.com/beauNate/homebrew-lazylms-macos)
 
-<p align="center">
-<img src="docs/demo.gif" alt="LazyLMS macOS Demo" width="100%"/>
-</p>
-
 > A minimal TUI (Text User Interface) client for LM Studio. This is a personal hobby project that utilizes the LM Studio REST API and provides an elegant terminal interface for interacting with local language models.
 >
 > ⚠️ **Currently in BETA**: Supports core functionalities with active development ongoing.
