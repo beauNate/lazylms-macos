@@ -6,26 +6,21 @@ before:
 
 builds:
   - main: ./cmd/lazylms
-    binary: lazylms
+    binary: lazylms-macos
     env:
       - CGO_ENABLED=0
     goos:
-      - linux
-      - windows
       - darwin
     goarch:
       - amd64
       - arm64
-    ignore:
-      - goos: windows
-        goarch: arm64
 
 archives:
   - format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    format_overrides:
-      - goos: windows
-        format: zip
+    files:
+      - LICENSE
+      - README.md
 
 checksum:
   name_template: "checksums.txt"
@@ -40,17 +35,74 @@ changelog:
 
 release:
   github:
-    owner: Rugz007
-    name: lazylms
+    owner: beauNate
+    name: lazylms-macos
   prerelease: auto
+  name_template: "{{.ProjectName}} {{.Tag}}"
 
 brews:
   - repository:
-      owner: Rugz007
-      name: homebrew-tap
+      owner: beauNate
+      name: homebrew-lazylms-macos
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     directory: Formula
-    homepage: https://github.com/Rugz007/lazylms
-    description: "A minimal TUI client for LM Studio"
+    homepage: https://github.com/beauNate/lazylms-macos
+    description: "lazylms-macos – Secure Mac-native TUI for LM Studio (Bubble Tea, Liquid Glass UI)"
     license: MIT
     test: |
-      system "#{bin}/lazylms", "--help"
+      system "#{bin}/lazylms-macos", "--help"
+    install: |
+      bin.install "lazylms-macos"
+
+# Docker configuration for GitHub Container Registry
+dockers:
+  - image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:{{ .Tag }}"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}.{{ .Minor }}"
+      - "ghcr.io/beaunate/lazylms-macos:latest"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+    skip_push: false
+
+  - image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:{{ .Tag }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}.{{ .Minor }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:latest-arm64"
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+    skip_push: false
+
+docker_manifests:
+  - name_template: "ghcr.io/beaunate/lazylms-macos:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:{{ .Tag }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:{{ .Tag }}"
+  - name_template: "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}"
+    image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}"
+  - name_template: "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}.{{ .Minor }}"
+    image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}.{{ .Minor }}-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:v{{ .Major }}.{{ .Minor }}"
+  - name_template: "ghcr.io/beaunate/lazylms-macos:latest"
+    image_templates:
+      - "ghcr.io/beaunate/lazylms-macos:latest-arm64"
+      - "ghcr.io/beaunate/lazylms-macos:latest"
