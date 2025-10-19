@@ -12,7 +12,7 @@ Check it out LM Studio here: https://lmstudio.ai/ and https://lmstudio.ai/docs/c
 
 ## Installation
 
-### Homebrew (macOS/Linux)
+### Homebrew (macOS)
 
 ```bash
 brew install rugz007/tap/lazylms
