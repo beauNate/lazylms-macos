@@ -10,9 +10,11 @@
   <img src="docs/demo.gif" alt="LazyLMS macOS Demo" width="100%"/>
 </p>
 
-A minimal TUI (Text User Interface) client for LM Studio. This is a personal hobby project that utilizes the LM Studio REST API and provides an elegant terminal interface for interacting with local language models.
-
+> A minimal TUI (Text User Interface) client for LM Studio. This is a personal hobby project that utilizes the LM Studio REST API and provides an elegant terminal interface for interacting with local language models.
+>
 > ⚠️ **Currently in BETA**: Supports core functionalities with active development ongoing.
+
+**Attribution**: This project was originally inspired by and adopted from the excellent work in [Rugz007/lazylms](https://github.com/Rugz007/lazylms), with gratitude to its authors and contributors. We've forked and evolved it for a Mac‑native TUI experience while keeping the spirit of the original.
 
 ## ✨ Features
 
@@ -51,115 +53,95 @@ Download from [latest release](https://github.com/beauNate/lazylms-macos/release
 - **Apple Silicon (M1/M2/M3/M4)**: `lazylms-macos_v2.0.0_darwin_arm64.dmg`
 - **Intel Macs**: `lazylms-macos_v2.0.0_darwin_amd64.dmg`
 
-Double-click the DMG and drag to Applications folder.
-
-#### Option 3: Binary Download
+#### Option 3: Go Install
 
 ```bash
-# Download for your architecture
-tar -xzf lazylms-macos_darwin_*.tar.gz
-chmod +x lazylms-macos
-./lazylms-macos
+go install github.com/beauNate/lazylms-macos@latest
 ```
 
-## 📖 Usage
-
-### Basic Commands
+#### Option 4: Build from Source
 
 ```bash
-# Start with default settings
+git clone https://github.com/beauNate/lazylms-macos.git
+cd lazylms-macos
+make build
+./bin/lazylms-macos
+```
+
+## 💻 Usage
+
+### Starting the Application
+
+```bash
 lazylms-macos
-
-# Specify custom LM Studio server
-lazylms-macos --server http://localhost:8080
-
-# Show version
-lazylms-macos --version
-
-# Show help
-lazylms-macos --help
 ```
 
-### Interface Overview
+### Keyboard Shortcuts
 
-- **Top Bar**: Current model and connection status
-- **Chat Area**: Conversation history with syntax highlighting
-- **Input Box**: Type your prompts here
-- **Status Bar**: Keyboard shortcuts and help
+#### Global
 
-## ⌨️ Keyboard Shortcuts
+- `Ctrl+C` / `q` - Quit application
+- `Ctrl+N` - New chat session
+- `Ctrl+S` - Select model
+- `Ctrl+H` - View command history
+- `Tab` - Cycle through UI elements
 
-<details>
-<summary><b>View all shortcuts</b></summary>
+#### Chat View
 
-### Navigation
-- `↑/↓` or `j/k` - Scroll chat history
-- `Page Up/Down` - Fast scroll
-- `Home/End` - Jump to start/end
-- `Tab` - Switch focus (chat/input)
-
-### Chat Controls
 - `Enter` - Send message
-- `Ctrl+C` - Cancel current generation
-- `Ctrl+L` - Clear chat history
-- `Ctrl+R` - Reload/refresh
+- `Esc` - Clear input / cancel operation
+- `↑` / `↓` - Navigate chat history
+- `Ctrl+L` - Clear screen
+- `j` / `k` - Scroll messages (Vim-style)
 
-### Model Management
-- `Ctrl+M` - Open model selector
-- `Ctrl+S` - Show model settings
+#### Model Selection
 
-### Application
-- `Ctrl+Q` or `Esc` - Quit application
-- `Ctrl+H` - Toggle help panel
-- `?` - Show shortcuts overlay
+- `↑` / `↓` or `j` / `k` - Navigate model list
+- `Enter` - Select model
+- `Esc` - Cancel
 
-### Text Editing (Input)
-- `Ctrl+A` - Move to start of line
-- `Ctrl+E` - Move to end of line
-- `Ctrl+K` - Delete to end of line
-- `Ctrl+U` - Delete entire line
-- `Ctrl+W` - Delete word backwards
+## ⚙️ Configuration
 
-</details>
+### Default Configuration Path
 
-## 🔧 Troubleshooting
+```
+~/.config/lazylms-macos/config.yaml
+```
 
-### Connection Issues
+### Configuration Options
 
-**Problem**: "Cannot connect to LM Studio"
+```yaml
+lm_studio:
+  base_url: "http://localhost:1234"
+  timeout: 30s
 
-- Ensure LM Studio is running
-- Check the server is started (LM Studio > Developer > Start Server)
-- Verify port is `1234` (default) or use `--server` flag
-- Check firewall settings
+ui:
+  theme: "default"
+  show_timestamps: true
+  max_history_lines: 1000
 
-### Model Not Loading
+api:
+  temperature: 0.7
+  max_tokens: 2048
+  stream: true
+```
 
-**Problem**: "No models available"
+### Environment Variables
 
-- Load a model in LM Studio first
-- Ensure the model is fully downloaded
-- Try restarting LM Studio server
-
-### Slow Response Times
-
-- Check model size vs available RAM
-- Review LM Studio GPU acceleration settings
-- Consider using a smaller/faster model
-- Monitor CPU/GPU usage in Activity Monitor
-
-### Display Issues
-
-- Ensure terminal supports 256 colors
-- Try resizing terminal window
-- Update to latest version: `brew upgrade lazylms-macos`
+- `LAZYLMS_LM_STUDIO_URL` - Override LM Studio base URL
+- `LAZYLMS_CONFIG_PATH` - Custom configuration file path
 
 ## 🛠️ Development
 
-### Building from Source
+### Prerequisites
+
+- Go 1.22 or higher
+- Make (optional, for build automation)
+
+### Building
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/beauNate/lazylms-macos.git
 cd lazylms-macos
 
@@ -167,85 +149,33 @@ cd lazylms-macos
 go mod download
 
 # Build
-go build -o lazylms-macos .
+make build
 
-# Run
-./lazylms-macos
-```
-
-### Project Structure
-
-```
-lazylms-macos/
-├── cmd/           # Command-line interface
-├── internal/      # Internal packages
-│   ├── api/      # LM Studio API client
-│   ├── ui/       # TUI components
-│   └── config/   # Configuration management
-├── docs/          # Documentation and assets
-└── scripts/       # Build and release scripts
+# Or without make
+go build -o bin/lazylms-macos .
 ```
 
 ### Running Tests
 
 ```bash
-# Run all tests
+make test
+
+# Or without make
 go test ./...
-
-# Run with coverage
-go test -cover ./...
-
-# Run specific package
-go test ./internal/api
 ```
 
-### Code Style
+### Linting
 
-This project follows standard Go conventions:
-- `gofmt` for formatting
-- `golangci-lint` for linting
-- Conventional Commits for commit messages
+```bash
+make lint
 
-## 🗺️ Roadmap
-
-- [ ] **v2.1.0**: Multi-model comparison view
-- [ ] **v2.2.0**: Conversation export (JSON, Markdown)
-- [ ] **v2.3.0**: Custom prompt templates
-- [ ] **v2.4.0**: Plugin system
-- [ ] **v3.0.0**: Cross-platform support (Linux, Windows)
-
-### Completed
-- [x] Basic chat interface
-- [x] Streaming responses
-- [x] Model selection
-- [x] Syntax highlighting
-- [x] Keyboard shortcuts
-- [x] Homebrew distribution
-- [x] DMG installer
-- [x] CI/CD pipeline
-
-## 🔄 CI/CD
-
-This project uses GitHub Actions for continuous integration and delivery:
-
-- **Testing**: Automated tests on every push and PR
-- **Building**: Multi-architecture builds (arm64, amd64)
-- **Releasing**: Automated GitHub Releases with GoReleaser
-- **Distribution**: 
-  - Homebrew tap updates
-  - DMG creation and notarization
-  - Binary archives
-  - Docker images (if configured)
-
-### Workflows
-
-- `.github/workflows/test.yml` - Run tests and linting
-- `.github/workflows/release.yml` - Build and publish releases
-- `.github/workflows/homebrew.yml` - Update Homebrew formula
+# Or without make
+golangci-lint run
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! This is a hobby project, but PRs and issues are appreciated.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### How to Contribute
 
@@ -271,7 +201,11 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgments & Attribution
+
+**Original Project**: This project is a fork and evolution of [Rugz007/lazylms](https://github.com/Rugz007/lazylms), an excellent terminal-based LLM client. We are deeply grateful to [Rugz007](https://github.com/Rugz007) and all contributors to the original project for laying the foundation and inspiration for this work. Their vision of a simple, elegant TUI for local language models made this macOS-focused adaptation possible. Thank you for your creativity, dedication, and for sharing your work with the open-source community! 🎉
+
+We also want to thank:
 
 - [LM Studio](https://lmstudio.ai/) - For the excellent local LLM platform
 - [Bubble Tea](https://github.com/charmbracelet/bubbletea) - For the TUI framework
