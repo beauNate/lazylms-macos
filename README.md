@@ -1,6 +1,6 @@
 # lazylms
 
-A minimal TUI client for LM Studio.
+A minimal TUI client for LM Studio. Currently in BETA state and supports only basic functionalities.
 
 ## Installation
 
