@@ -43,3 +43,14 @@ release:
     owner: Rugz007
     name: lazylms
   prerelease: auto
+
+brews:
+  - repository:
+      owner: Rugz007
+      name: homebrew-tap
+    folder: Formula
+    homepage: https://github.com/Rugz007/lazylms
+    description: "A minimal TUI client for LM Studio"
+    license: MIT
+    test: |
+      system "#{bin}/lazylms", "--help"
