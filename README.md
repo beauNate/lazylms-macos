@@ -1,6 +1,13 @@
 # lazylms
 
+<img width="600" height="433" alt="image" src="https://github.com/user-attachments/assets/9bcdcdfd-92f7-4704-939d-c8a0a5aef26a" />
+|
+
 A minimal TUI client for LM Studio. Currently in BETA state and supports only basic functionalities.
+
+This is a personal hobby project which utilizies LM Studio REST API and the `lms-cli`
+
+Check it out here: https://lmstudio.ai/ and https://lmstudio.ai/docs/cli
 
 ## Installation
 
