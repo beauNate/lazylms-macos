@@ -43,14 +43,3 @@ release:
     owner: Rugz007
     name: lazylms
   prerelease: auto
-
-brews:
-  - name: lazylms
-    repository:
-      owner: Rugz007
-      name: homebrew-tap
-    homepage: https://github.com/Rugz007/lazylms
-    description: "A minimal TUI client for LM Studio"
-    license: MIT
-    install: |
-      bin.install "lazylms"
