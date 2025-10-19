@@ -299,7 +299,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Bold(true).
 					Render(m.selectedModel + ":")
 				rendered := rendering.RenderMixedContent(m.currentResponse.Segments, m.chatViewport.Width, m.logChan)
-				content += "\n" + styledPrefix + "\n" + rendered
+				content += "\n" + styledPrefix + rendered
 			}
 			m.chatViewport.SetContent(content)
 			m.chatViewport.GotoBottom()
@@ -474,6 +474,7 @@ func (m Model) handleChatInputKeys(msg tea.KeyMsg, globalKeyMap keybindings.Glob
 		return m, m.nextViewCmd()
 	case globalKeyMap.ClearChat.Keys()[0]:
 		m.chatMessages = []rendering.ChatMessage{}
+		m.client.ClearConversation()
 		m.chatViewport.SetContent("")
 		m.chatViewport.GotoTop()
 		return m, tea.Cmd(func() tea.Msg { return logMsg("Chat cleared") })

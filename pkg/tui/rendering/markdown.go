@@ -111,7 +111,7 @@ func RenderChatMessage(message ChatMessage, width int, logChan chan string) stri
 	if len(message.Segments) > 0 {
 		// Render mixed content with segments
 		rendered := RenderMixedContent(message.Segments, width, logChan)
-		return styledPrefix + "\n" + rendered + "\n"
+		return styledPrefix + rendered + "\n"
 	}
 
 	// Fallback to simple content rendering
@@ -144,7 +144,12 @@ func RenderAIMessage(modelName, content string, width int, logChan chan string) 
 func RenderMixedContent(segments []ContentSegment, width int, logChan chan string) string {
 	var result strings.Builder
 
-	for _, segment := range segments {
+	// Add newline after prefix if first segment is reasoning
+	if len(segments) > 0 && segments[0].Type == ContentTypeReasoning {
+		result.WriteString("\n")
+	}
+
+	for i, segment := range segments {
 		switch segment.Type {
 		case ContentTypeReasoning:
 			// Render reasoning text with dimmed style and proper wrapping
@@ -153,7 +158,10 @@ func RenderMixedContent(segments []ContentSegment, width int, logChan chan strin
 				Foreground(styles.ColorReasoning).
 				Italic(true)
 			result.WriteString(reasoningStyle.Render(wrapped))
-			result.WriteString("\n")
+			// Add newline after reasoning if followed by output
+			if i < len(segments)-1 && segments[i+1].Type == ContentTypeOutput {
+				result.WriteString("\n")
+			}
 		case ContentTypeOutput:
 			// Render output text with markdown
 			rendered, err := renderMarkdown(segment.Text, width, logChan)
