@@ -8,7 +8,7 @@ A minimal TUI client for LM Studio. Currently in **BETA** state and supports onl
 
 This is a personal hobby project which utilizies LM Studio REST API and the `lms-cli`
 
-Check it out here: https://lmstudio.ai/ and https://lmstudio.ai/docs/cli
+Check it out LM Studio here: https://lmstudio.ai/ and https://lmstudio.ai/docs/cli
 
 ## Installation
 
