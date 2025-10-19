@@ -116,7 +116,7 @@ func (m Model) renderFooterView() string {
 			content = "tab: panels | enter: send | ctrl+l: clear chat | ↑↓/pgup/home: nav | esc: exit"
 		}
 	} else {
-		content = "1-5: panels | ctrl+s: system prompt | ctrl+l: clear chat | enter: select | h: help | ctrl+c: exit | LazyLMS v1.0.0"
+		content = "1-5: panels | ctrl+s: system prompt | ctrl+l: clear chat | enter: select | h: help | ctrl+c: exit | LazyLMS BETA"
 	}
 	return style.Render(content)
 }
