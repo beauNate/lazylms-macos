@@ -61,7 +61,10 @@ func Borderize(content string, active bool, width, height int, embeddedText map[
 	buildHorizontalBorder := func(leftText, middleText, rightText, leftCorner, inbetween, rightCorner string) string {
 		leftText = encloseInSquareBrackets(leftText)
 		middleText = encloseInSquareBrackets(middleText)
-		rightText = encloseInSquareBrackets(rightText)
+		// Don't bracket rightText to avoid corner conflict
+		if rightText != "" {
+			rightText = style.Render(border.TopRight) + rightText
+		}
 		// Calculate length of border between embedded texts
 		contentWidth := width - 2 // Account for left and right corners
 		remaining := max(0, contentWidth-lipgloss.Width(leftText)-lipgloss.Width(middleText)-lipgloss.Width(rightText))
